@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="mainContainer" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gr.ntua.medialab.medialabmanager.controller.MainController">
+
+    <left>
+        <VBox spacing="15.0" style="-fx-background-color: #f0f0f0; -fx-border-color: #cccccc; -fx-border-width: 0 1 0 0;">
+            <padding>
+                <Insets bottom="20.0" left="15.0" right="15.0" top="20.0" />
+            </padding>
+
+            <Label text="Στατιστικά" textFill="#2c3e50">
+                <font><Font name="System Bold" size="18.0" /></font>
+            </Label>
+
+            <VBox spacing="5.0">
+                <Label text="Κατηγορίες:" textFill="#7f8c8d" />
+                <Label fx:id="totalCategoriesLabel" text="0">
+                    <font><Font name="System Bold" size="14.0" /></font>
+                </Label>
+            </VBox>
+
+            <VBox spacing="5.0">
+                <Label text="Σύνολο Εγγράφων:" textFill="#7f8c8d" />
+                <Label fx:id="totalDocsLabel" text="0">
+                    <font><Font name="System Bold" size="14.0" /></font>
+                </Label>
+            </VBox>
+
+            <VBox spacing="5.0">
+                <Label text="Παρακολουθώ:" textFill="#7f8c8d" />
+                <Label fx:id="myDocsLabel" text="0">
+                    <font><Font name="System Bold" size="14.0" /></font>
+                </Label>
+            </VBox>
+
+            <Label text="-----------------" />
+
+            <Label text="Συνδεδεμένος ως:" textFill="#7f8c8d" />
+            <Label fx:id="usernameLabel" text="...">
+                <font><Font name="System Italic" size="13.0" /></font>
+            </Label>
+            <Label fx:id="roleLabel" text="..." textFill="#2980b9">
+                <font><Font name="System Bold" size="12.0" /></font>
+            </Label>
+
+        </VBox>
+    </left>
+
+    <center>
+        <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE">
+
+            <Tab text="🔍 Αναζήτηση Εγγράφων">
+                <VBox spacing="15.0">
+                    <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                    </padding>
+
+                    <Label text="Αναζήτηση στη Βιβλιοθήκη" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
+
+                    <HBox spacing="10.0" alignment="CENTER_LEFT">
+                        <Label text="Φίλτρο:"/>
+                        <TextField fx:id="txtSearchQuery" promptText="Τίτλος, Συγγραφέας ή Κατηγορία..." prefWidth="300"/>
+                        <Button text="🔍 Αναζήτηση" onAction="#searchDocuments" defaultButton="true"/>
+                    </HBox>
+
+                    <TableView fx:id="searchTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colSearchTitle" text="Τίτλος" prefWidth="150"/>
+                            <TableColumn fx:id="colSearchAuthor" text="Συγγραφέας" prefWidth="120"/>
+                            <TableColumn fx:id="colSearchCategory" text="Κατηγορία" prefWidth="100"/>
+                            <TableColumn fx:id="colSearchDate" text="Ημ/νία Δημ." prefWidth="100"/>
+                            <TableColumn fx:id="colSearchVersion"  text="Έκδοση" prefWidth="80"/>
+                        </columns>
+                        <placeholder>
+                            <Label text="Πληκτρολογήστε κάτι για αναζήτηση..." />
+                        </placeholder>
+                    </TableView>
+                </VBox>
+            </Tab>
+
+            <Tab fx:id="documentsTab" text="📄 Έγγραφα">
+                <SplitPane dividerPositions="0.3">
+
+                    <VBox spacing="10.0">
+                        <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+                        <Label text="Λίστα Εγγράφων" style="-fx-font-weight: bold;"/>
+
+                        <CheckBox fx:id="chkShowFollowed" text="Μόνο όσα παρακολουθώ" onAction="#loadDocsTable"/>
+
+                        <TableView fx:id="docsTable" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="colDocTitle" text="Τίτλος" prefWidth="150"/>
+                                <TableColumn fx:id="colDocCategory" text="Κατηγορία" prefWidth="100"/>
+                            </columns>
+                        </TableView>
+
+                        <Button text="➕ Νέο Έγγραφο" onAction="#createNewDoc" maxWidth="Infinity"/>
+                    </VBox>
+
+                    <VBox spacing="10.0">
+                        <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="Λεπτομέρειες Εγγράφου" style="-fx-font-weight: bold;"/>
+                            <ToggleButton fx:id="btnFollow" text="☆ Follow" onAction="#toggleFollow" />
+                        </HBox>
+
+                        <HBox spacing="10">
+                            <VBox>
+                                <Label text="Τίτλος:"/>
+                                <TextField fx:id="txtDocTitle" prefWidth="200"/>
+                            </VBox>
+                            <VBox>
+                                <Label text="Κατηγορία:"/>
+                                <TextField fx:id="txtDocCategory" prefWidth="150" promptText="π.χ. Science"/>
+                            </VBox>
+                        </HBox>
+
+                        <HBox fx:id="versionBox" alignment="CENTER_LEFT" spacing="10">
+                            <Label text="Προβολή Έκδοσης:"/>
+                            <ComboBox fx:id="cmbVersions" prefWidth="150"/>
+                        </HBox>
+
+                        <Label text="Κείμενο:"/>
+                        <TextArea fx:id="txtDocContent" VBox.vgrow="ALWAYS" wrapText="true"/>
+
+                        <HBox spacing="15" alignment="CENTER_RIGHT">
+                            <Label fx:id="lblVersionInfo" text="Έκδοση: 1" textFill="#888888"/>
+                            <Button text="💾 Αποθήκευση" onAction="#saveDocument" style="-fx-background-color: #2980b9; -fx-text-fill: white;"/>
+                            <Button text="🗑️ Διαγραφή" onAction="#deleteDocument" style="-fx-background-color: #c0392b; -fx-text-fill: white;"/>
+                        </HBox>
+                    </VBox>
+                </SplitPane>
+            </Tab>
+
+            <Tab fx:id="usersTab" text="👤 Χρήστες (Admin)">
+                <VBox spacing="10.0">
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+
+                    <TableView fx:id="usersTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colUsername" prefWidth="150.0" text="Username" />
+                            <TableColumn fx:id="colRole" prefWidth="100.0" text="Ρόλος" />
+                            <TableColumn fx:id="colFullname" prefWidth="200.0" text="Ονοματεπώνυμο" />
+                        </columns>
+                        <placeholder>
+                            <Label text="Δεν υπάρχουν χρήστες" />
+                        </placeholder>
+                    </TableView>
+
+                    <Label style="-fx-font-weight: bold;" text="Διαχείριση Χρήστη (Επιλέξτε από τον πίνακα για επεξεργασία):" />
+
+                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <TextField fx:id="txtNewUsername" prefWidth="100" promptText="Username" />
+                        <TextField fx:id="txtNewPassword" prefWidth="100" promptText="Password" />
+                        <TextField fx:id="txtNewFullname" prefWidth="120" promptText="Ονοματεπώνυμο" />
+                        <ComboBox fx:id="cmbNewRole" prefWidth="110" promptText="Επιλέξτε Ρόλο" />
+                        <TextField fx:id="txtNewUserCategories" prefWidth="150" promptText="Κατηγορίες (π.χ. Music, Tech)" />
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <Button onAction="#addUser" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="➕ Προσθήκη" />
+                        <Button onAction="#editUser" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="✏️ Επεξεργασία" />
+                        <Button onAction="#deleteUser" style="-fx-background-color: #c0392b; -fx-text-fill: white;" text="❌ Διαγραφή" />
+                    </HBox>
+
+                </VBox>
+            </Tab>
+
+            <Tab fx:id="categoriesTab" text="📂 Κατηγορίες (Admin)">
+                <VBox spacing="10.0">
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+
+                    <TableView fx:id="categoriesTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colCategoryName" prefWidth="300.0" text="Όνομα Κατηγορίας" />
+                        </columns>
+                        <placeholder>
+                            <Label text="Δεν υπάρχουν κατηγορίες" />
+                        </placeholder>
+                    </TableView>
+
+                    <Label style="-fx-font-weight: bold;" text="Νέα Κατηγορία:" />
+                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <TextField fx:id="txtNewCategoryName" prefWidth="200" promptText="Όνομα (π.χ. Science)" />
+                        <Button onAction="#addCategory" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="➕ Προσθήκη" />
+                    </HBox>
+
+                    <HBox spacing="10.0">
+                        <Button onAction="#editCategory" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="✏️ Αλλαγή Ονόματος" />
+                        <Button onAction="#deleteCategory" style="-fx-background-color: #c0392b; -fx-text-fill: white;" text="❌ Διαγραφή Επιλεγμένης" />
+                    </HBox>
+                    <Label text="*Για αλλαγή, επιλέξτε κατηγορία, γράψτε το νέο όνομα στο κουτάκι και πατήστε 'Αλλαγή Ονόματος'." textFill="#7f8c8d">
+                        <font><Font size="11.0"/></font>
+                    </Label>
+                </VBox>
+            </Tab>
+
+        </TabPane>
+    </center>
+
+</BorderPane>
