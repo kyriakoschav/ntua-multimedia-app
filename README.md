@@ -25,4 +25,4 @@ The project implements a robust Model-View-Controller (MVC) architecture and dem
 For a detailed architectural breakdown and data schema design, please refer to the attached `αναφορα τελικής εργασίας.pdf` (in Greek) included in this repository.
 
 ## Team
-* **[Το Όνομα σου στα Αγγλικά]** - [Βάλε το Link του LinkedIn σου]
+* **Kyriakos Chaviaras** 
