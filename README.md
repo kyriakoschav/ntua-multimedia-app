@@ -1,4 +1,4 @@
-# ntua-multimedia-app
+
 # Multimedia Document Management System 
 
 ## Overview
